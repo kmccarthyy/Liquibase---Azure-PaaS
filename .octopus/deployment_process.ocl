@@ -3,12 +3,12 @@ step "postgres-create-database-if-not-exists" {
 
     action {
         properties = {
-            createDatabaseName = "kellyonsite-db"
+            createDatabaseName = "#{Project.PostgreSQL.Database.Name}"
             createPort = "5432"
-            createPosgreSQLServerName = "kellyonsite-db"
+            createPosgreSQLServerName = "#{Project.PostgresSQL.Server.Name}"
             createTrustSSL = "False"
-            createUsername = "kelly"
-            createUserPassword = "Octopus.DB.Password"
+            createUsername = "#{Project.PostgreSQL.Database.User.Name}"
+            createUserPassword = "#{Project.PostgreSQL.Database.User.Password}"
             Octopus.Action.Template.Id = "ActionTemplates-6041"
             Octopus.Action.Template.Version = "10"
             postgresCommandTimeout = "30"
