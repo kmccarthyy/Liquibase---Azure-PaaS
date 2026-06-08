@@ -5,6 +5,7 @@ step "postgres-create-database-if-not-exists" {
         properties = {
             createDatabaseName = "kellyonsite-db"
             createPort = "5432"
+            createPosgreSQLServerName = "kellyonsite-db"
             createTrustSSL = "False"
             createUsername = "kelly"
             createUserPassword = "Octopus.DB.Password"
