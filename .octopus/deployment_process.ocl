@@ -17,3 +17,40 @@ step "postgres-create-database-if-not-exists" {
         worker_pool = "hosted-ubuntu"
     }
 }
+
+step "liquibase-run-updatesql-command-apply-changes" {
+    name = "Liquibase - Run updateSQL Command (Apply Changes)"
+
+    action {
+        properties = {
+            liquibaseAuthenticationMethod = "usernamepassword"
+            liquibaseChangeLogFileName = "#{Project.Liquibase.ChangeLog}"
+            liquibaseChangeset = "{\"PackageId\":\"Functions\",\"FeedId\":\"octopus-server-built-in\"}"
+            liquibaseCommand = "updateSQL"
+            liquibaseCommandStyle = "modern"
+            liquibaseDatabaseName = "#{Project.PostgreSQL.Database.Name}"
+            liquibaseDatabaseType = "PostgreSQL"
+            liquibaseDownload = "True"
+            liquibaseDownloadDatabaseDriver = "True"
+            liquibasePassword = "#{Azure.PostgreSql.Admin.Password}"
+            liquibaseQueryStringParameters = "?sslmode=require"
+            liquibaseServerName = "#{Azure.US.Primary.PostgreSql.Name}.postgres.database.azure.com"
+            liquibaseServerPort = "#{PostgreSQL.Database.Server.Port}"
+            liquibaseUsername = "#{Azure.PostgreSql.Admin.UserName}"
+            Octopus.Action.Template.Id = "ActionTemplates-6042"
+            Octopus.Action.Template.Version = "30"
+        }
+        worker_pool = "hosted-ubuntu"
+
+        packages "liquibaseChangeset" {
+            acquisition_location = "Server"
+            feed = "octopus-server-built-in"
+            package_id = "Functions"
+            properties = {
+                Extract = "True"
+                PackageParameterName = "liquibaseChangeset"
+                SelectionMode = "deferred"
+            }
+        }
+    }
+}
