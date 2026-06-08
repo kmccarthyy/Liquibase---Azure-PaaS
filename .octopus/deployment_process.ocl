@@ -25,7 +25,7 @@ step "liquibase-run-updatesql-command-apply-changes" {
         properties = {
             liquibaseAuthenticationMethod = "usernamepassword"
             liquibaseChangeLogFileName = "#{Project.Liquibase.ChangeLog}"
-            liquibaseChangeset = "{\"PackageId\":\"Functions\",\"FeedId\":\"octopus-server-built-in\"}"
+            liquibaseChangeset = "{\"PackageId\":\"sakila.postgres.liquibase\",\"FeedId\":\"octopus-server-built-in\"}"
             liquibaseCommand = "updateSQL"
             liquibaseCommandStyle = "modern"
             liquibaseDatabaseName = "#{Project.PostgreSQL.Database.Name}"
@@ -45,7 +45,7 @@ step "liquibase-run-updatesql-command-apply-changes" {
         packages "liquibaseChangeset" {
             acquisition_location = "Server"
             feed = "octopus-server-built-in"
-            package_id = "Functions"
+            package_id = "sakila.postgres.liquibase"
             properties = {
                 Extract = "True"
                 PackageParameterName = "liquibaseChangeset"
