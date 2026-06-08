@@ -106,3 +106,26 @@ step "liquibase-run-command-apply-changes" {
         }
     }
 }
+
+step "msft-teams-notification-update-later-once-unique-team-is-created-for-myself" {
+    name = "MSFT Teams Notification - UPDATE LATER - once unique team is created for myself"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $deploymentName = $OctopusParameters["Octopus.Deployment.Name"]
+                $releaseNumber  = $OctopusParameters["Octopus.Release.Number"]
+                $environment    = $OctopusParameters["Octopus.Environment.Name"]
+                
+                Write-Host "Deployment Name: $deploymentName"
+                Write-Host "Release Number:  $releaseNumber"
+                Write-Host "Environment:     $environment"
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "hosted-ubuntu"
+    }
+}
