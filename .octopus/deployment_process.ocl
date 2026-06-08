@@ -65,6 +65,44 @@ step "dba-approval" {
             Octopus.Action.Manual.BlockConcurrentDeployments = "False"
             Octopus.Action.Manual.Instructions = "Review the scripts to be executed and approve or deny."
             Octopus.Action.Manual.ResponsibleTeamIds = "global/everyone"
+            Octopus.Action.RunOnServer = "false"
+        }
+    }
+}
+
+step "liquibase-run-command-apply-changes" {
+    name = "Liquibase - Run command (Apply Changes)"
+
+    action {
+        properties = {
+            liquibaseAuthenticationMethod = "usernamepassword"
+            liquibaseChangeLogFileName = "#{Project.Liquibase.ChangeLog}"
+            liquibaseChangeset = "{\"PackageId\":\"sakila.postgres.liquibase\",\"FeedId\":\"octopus-server-built-in\"}"
+            liquibaseCommand = "update"
+            liquibaseCommandStyle = "modern"
+            liquibaseDatabaseName = "#{Project.PostgreSQL.Database.User.Name}#{Project.PostgreSQL.Database.Name}"
+            liquibaseDatabaseType = "PostgreSQL"
+            liquibaseDownload = "True"
+            liquibaseDownloadDatabaseDriver = "True"
+            liquibasePassword = "#{Project.PostgreSQL.Database.User.Password}"
+            liquibaseQueryStringParameters = "?sslmode=require"
+            liquibaseServerName = "#{Project.PostgresSQL.Server.Name}"
+            liquibaseServerPort = "5432"
+            liquibaseUsername = "#{Project.PostgreSQL.Database.User.Name}"
+            Octopus.Action.Template.Id = "ActionTemplates-6042"
+            Octopus.Action.Template.Version = "30"
+        }
+        worker_pool = "hosted-ubuntu"
+
+        packages "liquibaseChangeset" {
+            acquisition_location = "Server"
+            feed = "octopus-server-built-in"
+            package_id = "sakila.postgres.liquibase"
+            properties = {
+                Extract = "True"
+                PackageParameterName = "liquibaseChangeset"
+                SelectionMode = "deferred"
+            }
         }
     }
 }
