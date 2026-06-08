@@ -54,3 +54,17 @@ step "liquibase-run-updatesql-command-apply-changes" {
         }
     }
 }
+
+step "dba-approval" {
+    name = "DBA Approval"
+
+    action {
+        action_type = "Octopus.Manual"
+        environments = ["production"]
+        properties = {
+            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
+            Octopus.Action.Manual.Instructions = "Review the scripts to be executed and approve or deny."
+            Octopus.Action.Manual.ResponsibleTeamIds = "global/everyone"
+        }
+    }
+}
