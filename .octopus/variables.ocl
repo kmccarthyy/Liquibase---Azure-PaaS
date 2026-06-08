@@ -1,0 +1,11 @@
+variable "Project.PostgreSQL.Database.User.Name" {
+    value "kelly" {}
+}
+
+variable "Project.PostgreSQL.Database.Name" {
+    value "kellyonsite-db" {}
+}
+
+variable "Project.Liquibase.ChangeLog" {
+    value "dbchangelog.xml" {}
+}
