@@ -178,7 +178,21 @@ step "run-a-script" {
                     @{
                       activityTitle = "✅ Deployment Succeeded"
                       facts = @(
-                        @{ name = "Environment"; value
+                        @{ name = "Environment"; value = $environment },
+                        @{ name = "Release";     value = $release }
+                      )
+                    }
+                  )
+                  potentialAction = @(
+                    @{
+                      "@type" = "OpenUri"
+                      name    = "View Deployment"
+                      targets = @(@{ os = "default"; uri = $deploymentUrl })
+                    }
+                  )
+                } | ConvertTo-Json -Depth 10
+                
+                Invoke-RestMethod -Uri $webhookUrl -Method Post -ContentType "application/json" -Body $payload
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
