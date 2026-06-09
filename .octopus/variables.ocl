@@ -17,3 +17,7 @@ variable "Project.PostgreSQL.Database.Name" {
 variable "Notification.TeamsWebhook" {
     value "https://default18eb006bc3c84a7293cdfe4b293f82.ee.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/12c532bd1f0b483fa2d22c72b6dbf512/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lnlhf-LnlatHkBn39Q2lNKuP-I8Y6HjwAuQjjsx_syk" {}
 }
+
+variable "Octopus.Web.ServerUri" {
+    value "demo.octopus.app" {}
+}
