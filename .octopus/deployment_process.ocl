@@ -112,6 +112,7 @@ step "msft-teams-notification-update-later-once-unique-team-is-created-for-mysel
 
     action {
         action_type = "Octopus.Script"
+        is_disabled = true
         properties = {
             Octopus.Action.Script.ScriptBody = <<-EOT
                 $deploymentName = $OctopusParameters["Octopus.Deployment.Name"]
@@ -134,6 +135,7 @@ step "microsoft-power-automate-post-adaptivecard" {
     name = "Microsoft Power Automate - Post AdaptiveCard"
 
     action {
+        is_disabled = true
         properties = {
             Octopus.Action.Template.Id = "ActionTemplates-6043"
             Octopus.Action.Template.Version = "2"
@@ -148,6 +150,39 @@ step "microsoft-power-automate-post-adaptivecard" {
             PowerAutomatePostAdaptiveCard.Timeout = "60"
             PowerAutomatePostAdaptiveCard.Title = "#{Octopus.Project.Name} #{Octopus.Release.Number} deployed to #{Octopus.Environment.Name}#{if Octopus.Deployment.Tenant.Id} for #{Octopus.Deployment.Tenant.Name}#{/if}"
             PowerAutomatePostAdaptiveCard.TitleColor = "default"
+        }
+        worker_pool = "hosted-ubuntu"
+    }
+}
+
+step "run-a-script" {
+    name = "Run a Script"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $webhookUrl  = $OctopusParameters["Notification.TeamsWebhook"]
+                $environment = $OctopusParameters["Octopus.Environment.Name"]
+                $release     = $OctopusParameters["Octopus.Release.Number"]
+                $serverUrl   = $OctopusParameters["Octopus.Web.ServerUri"]
+                $deploymentId = $OctopusParameters["Octopus.Deployment.Id"]
+                $deploymentUrl = "$serverUrl/app#/$deploymentId"
+                
+                $payload = @{
+                  "@type"      = "MessageCard"
+                  "@context"   = "http://schema.org/extensions"
+                  summary      = "Octopus Deployment"
+                  themeColor   = "0076D7"
+                  sections     = @(
+                    @{
+                      activityTitle = "✅ Deployment Succeeded"
+                      facts = @(
+                        @{ name = "Environment"; value
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
         }
         worker_pool = "hosted-ubuntu"
     }
