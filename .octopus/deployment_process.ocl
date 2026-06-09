@@ -107,56 +107,8 @@ step "liquibase-run-command-apply-changes" {
     }
 }
 
-step "msft-teams-notification-update-later-once-unique-team-is-created-for-myself" {
-    name = "MSFT Teams Notification - UPDATE LATER - once unique team is created for myself"
-
-    action {
-        action_type = "Octopus.Script"
-        is_disabled = true
-        properties = {
-            Octopus.Action.Script.ScriptBody = <<-EOT
-                $deploymentName = $OctopusParameters["Octopus.Deployment.Name"]
-                $releaseNumber  = $OctopusParameters["Octopus.Release.Number"]
-                $environment    = $OctopusParameters["Octopus.Environment.Name"]
-                
-                Write-Host "Deployment Name: $deploymentName"
-                Write-Host "Release Number:  $releaseNumber"
-                Write-Host "Environment:     $environment"
-                EOT
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
-            OctopusUseBundledTooling = "False"
-        }
-        worker_pool = "hosted-ubuntu"
-    }
-}
-
-step "microsoft-power-automate-post-adaptivecard" {
-    name = "Microsoft Power Automate - Post AdaptiveCard"
-
-    action {
-        is_disabled = true
-        properties = {
-            Octopus.Action.Template.Id = "ActionTemplates-6043"
-            Octopus.Action.Template.Version = "2"
-            PowerAutomatePostAdaptiveCard.Body = "For more information, please see [deployment details](#{if Octopus.Web.ServerUri}#{Octopus.Web.ServerUri}#{else}#{Octopus.Web.BaseUrl}#{/if}#{Octopus.Web.DeploymentLink})!"
-            PowerAutomatePostAdaptiveCard.BodyColor = "default"
-            PowerAutomatePostAdaptiveCard.ButtonTitle = "Adaptive Card Designer"
-            PowerAutomatePostAdaptiveCard.ButtonUrl = "https://adaptivecards.io/designer/"
-            PowerAutomatePostAdaptiveCard.HookUrl = "https://make.powerautomate.com/environments/Default-18eb006b-c3c8-4a72-93cd-fe4b293f82ee/flows/3a7725fc-12e2-4382-aa64-d8d72f346ec1/details"
-            PowerAutomatePostAdaptiveCard.RetryCount = "1"
-            PowerAutomatePostAdaptiveCard.RetryDelay = "100"
-            PowerAutomatePostAdaptiveCard.RetryPosting = "False"
-            PowerAutomatePostAdaptiveCard.Timeout = "60"
-            PowerAutomatePostAdaptiveCard.Title = "#{Octopus.Project.Name} #{Octopus.Release.Number} deployed to #{Octopus.Environment.Name}#{if Octopus.Deployment.Tenant.Id} for #{Octopus.Deployment.Tenant.Name}#{/if}"
-            PowerAutomatePostAdaptiveCard.TitleColor = "default"
-        }
-        worker_pool = "hosted-ubuntu"
-    }
-}
-
 step "run-a-script" {
-    name = "Run a Script"
+    name = "MSFT Teams Notification"
 
     action {
         action_type = "Octopus.Script"
